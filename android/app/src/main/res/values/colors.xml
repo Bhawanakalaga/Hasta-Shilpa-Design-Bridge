@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bamboo_dark">#0F3D2E</color>
+    <color name="bamboo_primary">#1B4332</color>
+    <color name="bamboo_gold">#D4AF37</color>
+    <color name="bamboo_bg">#F8F5F0</color>
+    <color name="bamboo_card">#FFFFFF</color>
+    <color name="bamboo_section">#E9F5EC</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+</resources>

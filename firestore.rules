@@ -1,0 +1,137 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Phase 3: Primitives & Global Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn(); // Relaxed for demo - allow signed in users even if email not verified
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- Phase 4: Entity Validations (Pillar 2) ---
+
+    function isValidUser(data) {
+      return (!('name' in data) || (data.name is string && data.name.size() >= 0 && data.name.size() <= 100)) &&
+        (!('email' in data) || (data.email is string && data.email.size() >= 0 && data.email.size() <= 100)) &&
+        (!('language' in data) || (data.language is string && (data.language.size() == 0 || (data.language.size() >= 2 && data.language.size() <= 10)))) &&
+        (!('phone' in data) || (data.phone is string && data.phone.size() <= 20)) &&
+        (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 1000000)) &&
+        (!('favorites' in data) || (data.favorites is list && data.favorites.size() <= 100)) &&
+        (!('cart' in data) || (data.cart is list && data.cart.size() <= 50)) &&
+        (!('updatedAt' in data) || data.updatedAt == request.time) &&
+        (!('createdAt' in data) || (
+          resource == null ? data.createdAt == request.time : true
+        ));
+    }
+
+    function isValidProduct(data) {
+      return data.keys().hasAll(['title', 'description', 'price', 'image', 'sellerId']) &&
+        data.title is map && 
+        data.description is map &&
+        data.price is number && data.price >= 0 && data.price <= 1000000 &&
+        data.image is string && data.image.size() <= 500 &&
+        data.sellerId == request.auth.uid &&
+        (!('createdAt' in data) || data.createdAt == request.time);
+    }
+
+    function isValidOrder(data) {
+      return data.keys().hasAll(['items', 'total', 'status']) &&
+        data.items is list && data.items.size() > 0 &&
+        data.total is number && data.total >= 0 &&
+        data.status is string &&
+        (!('userId' in data) || isValidId(data.userId)) &&
+        (!('createdAt' in data) || data.createdAt == request.time || data.createdAt is string);
+    }
+
+    function isValidPriceHistory(data) {
+      return data.keys().hasAll(['userId', 'result']) &&
+        data.userId == request.auth.uid &&
+        data.result is number &&
+        (!('createdAt' in data) || data.createdAt == request.time || data.createdAt is string || data.createdAt == null);
+    }
+
+    function isValidTrack(data) {
+      return data.keys().hasAll(['userId', 'bambooCount', 'cost']) &&
+        (data.userId == request.auth.uid || data.userId == null) &&
+        data.bambooCount is number &&
+        data.cost is number &&
+        (!('createdAt' in data) || data.createdAt == request.time || data.createdAt is string || data.createdAt == null);
+    }
+
+    // --- Phase 4: Collection Rules ---
+
+    // Initial Check
+    match /test/connection {
+      allow get: if true;
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if isSignedIn(); 
+      allow create: if isOwner(userId) && isValidId(userId) && 
+        isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['name', 'language', 'phone', 'favorites', 'cart', 'photoURL', 'email', 'createdAt', 'updatedAt']) &&
+        (!('email' in incoming()) || !('email' in existing()) || incoming().email == existing().email) &&
+        (!('createdAt' in incoming()) || !('createdAt' in existing()) || incoming().createdAt == existing().createdAt)
+      );
+    }
+
+    // Products (Pillar 8: Secure List Queries)
+    match /products/{productId} {
+      allow get: if true;
+      allow list: if true; // Public listings
+      allow create: if isVerified() && isValidId(productId) && isValidProduct(incoming());
+      allow update: if isVerified() && isValidId(productId) && existing().sellerId == request.auth.uid && isValidProduct(incoming()) && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['title', 'description', 'price', 'image', 'category', 'measurements', 'materials', 'tools', 'steps', 'timeRequired', 'isModern'])
+      );
+      allow delete: if isVerified() && isValidId(productId) && existing().sellerId == request.auth.uid;
+    }
+
+    // Material Tracking
+    match /material_tracking/{trackId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidTrack(incoming());
+      allow update, delete: if isOwner(resource.data.userId);
+    }
+
+    // Price History
+    match /price_history/{historyId} {
+      allow read: if isSignedIn() && (isOwner(resource.data.userId) || resource.data.userId == null);
+      allow create: if isSignedIn() && isValidPriceHistory(incoming());
+      allow delete: if isOwner(resource.data.userId);
+    }
+
+    // Orders
+    match /orders/{orderId} {
+      allow get: if true; // Public tracking by order ID
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if (isSignedIn() || true) && isValidId(orderId) && isValidOrder(incoming());
+      allow update: if false; 
+      allow delete: if false;
+    }
+  }
+}

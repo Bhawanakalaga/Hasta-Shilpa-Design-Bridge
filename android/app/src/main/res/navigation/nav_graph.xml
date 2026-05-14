@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.hastashilpa.app.ui.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_marketplace"
+        android:name="com.hastashilpa.app.ui.MarketplaceFragment"
+        android:label="Marketplace"
+        tools:layout="@layout/fragment_marketplace" />
+
+    <fragment
+        android:id="@+id/navigation_tracker"
+        android:name="com.hastashilpa.app.ui.TrackerFragment"
+        android:label="Tracker"
+        tools:layout="@layout/fragment_tracker" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.hastashilpa.app.ui.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/navigation_cart"
+        android:name="com.hastashilpa.app.ui.CartFragment"
+        android:label="Cart"
+        tools:layout="@layout/fragment_cart" />
+
+    <fragment
+        android:id="@+id/navigation_calculator"
+        android:name="com.hastashilpa.app.ui.PriceCalculatorFragment"
+        android:label="Calculator"
+        tools:layout="@layout/fragment_price_calculator" />
+
+    <fragment
+        android:id="@+id/navigation_chatbot"
+        android:name="com.hastashilpa.app.ui.ChatbotFragment"
+        android:label="Helper"
+        tools:layout="@layout/fragment_chatbot" />
+
+    <fragment
+        android:id="@+id/navigation_product_detail"
+        android:name="com.hastashilpa.app.ui.ProductDetailFragment"
+        android:label="Detail"
+        tools:layout="@layout/fragment_product_detail" />
+
+    <fragment
+        android:id="@+id/navigation_blueprint"
+        android:name="com.hastashilpa.app.ui.BlueprintFragment"
+        android:label="Blueprint"
+        tools:layout="@layout/fragment_blueprint" />
+
+</navigation>

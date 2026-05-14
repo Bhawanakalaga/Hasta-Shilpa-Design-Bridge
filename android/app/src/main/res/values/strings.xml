@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">HASTA-SHILPA</string>
+    <string name="tagline">Design Bridge for Artisans</string>
+    <string name="crafting_innovation">Crafting Innovation…</string>
+
+    <!-- Navigation -->
+    <string name="menu_home">Home</string>
+    <string name="menu_marketplace">Market</string>
+    <string name="menu_tracker">Tracker</string>
+    <string name="menu_profile">Profile</string>
+
+    <!-- Language Selection -->
+    <string name="select_language">Plese select your language</string>
+    <string name="hindi">हिंदी</string>
+    <string name="kannada">ಕನ್ನಡ</string>
+    <string name="english">English</string>
+
+    <!-- Login/Register -->
+    <string name="hint_email">Email Address</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
+    <string name="no_account">Don\'t have an account? Register</string>
+
+    <!-- Tracker -->
+    <string name="tracker_title">Material Tracker</string>
+    <string name="hint_bamboo">Bamboo Sticks Count</string>
+    <string name="hint_cane">Cane Length (meters)</string>
+    <string name="hint_cost">Material Cost (₹)</string>
+    <string name="btn_save">Calculate &amp; Save</string>
+
+    <!-- Price Calculator -->
+    <string name="calc_title">Price Calculator</string>
+    <string name="hint_hours">Labor Hours</string>
+    <string name="hint_rate">Labor Rate (₹/hr)</string>
+    <string name="btn_calculate">Calculate Selling Price</string>
+
+    <!-- Chatbot -->
+    <string name="chatbot_title">Hasta Helper</string>
+    <string name="hint_chat">Ask about designs or pricing...</string>
+
+    <!-- Marketplace -->
+    <string name="market_title">Artisan Marketplace</string>
+    <string name="btn_upload">Upload Product</string>
+
+    <!-- Feedback -->
+    <string name="login_success">Login Successful</string>
+    <string name="data_saved">Data Saved Successfully</string>
+    <string name="item_added">Item Added to Cart</string>
+    <string name="err_empty">Field cannot be empty</string>
+
+    <string name="title_activity_main">Hasta-Shilpa</string>
+    <string name="package_name">com.hastashilpa.app</string>
+    <string name="custom_url_scheme">com.hastashilpa.app</string>
+</resources>

@@ -1,8 +1,0 @@
-{
-  "name": "Hasta-Shilpa: Android App using GenAI",
-  "description": "A design bridge for Western Ghats artisans, providing modern bamboo designs, blueprints, material tracking, and a direct marketplace powered by GenAI.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ]
-}

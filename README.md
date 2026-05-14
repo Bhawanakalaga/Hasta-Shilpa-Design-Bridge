@@ -85,16 +85,6 @@ Bamboo and cane artisans often possess world-class skills but struggle with "Des
    npx cap open android
    ```
 
----
-
-## ⚠️ Troubleshooting & Known Issues
-
-### "Firebase: Error (auth/billing-not-enabled)"
-If you encounter this error during **Phone OTP Login**, it means your Firebase project requires a billing account (Identity Platform) to send SMS verification after the free tier limit.
-**Solution**:
-1. Go to the [Firebase Console](https://console.firebase.google.com/).
-2. Select your project -> **Authentication** -> **Settings**.
-3. Ensure "Identity Platform" is enabled, or switch to **Google Login** or **Email Login** for a completely free experience without billing enabled.
 
 ---
 
